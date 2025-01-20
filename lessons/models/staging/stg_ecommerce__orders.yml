@@ -5,13 +5,17 @@ models:
     description: "Table of 1 row per order"
     columns:
       - name: order_id
-        description: ""
+        description: "Unique identifier for order"
         tests:
-          - not_null
-          - unique
+          - not_null:
+              severity: error
+          - unique:
+              severity: error
 
       - name: user_id
-        description: ""
+        description: "ID for user who made the order"
+        tests:
+          - not_null
 
       - name: status
         description: ""
@@ -21,16 +25,29 @@ models:
               values: ['Processing', 'Shipped', 'Cancelled', 'Complete', 'Returned']
 
       - name: created_at
-        description: ""
+        description: "time order was created"
 
       - name: returned_at
-        description: ""
+        description: "time order was returned"
+        tests:
+          - not_null:
+              where: "status = 'Returned'"
 
       - name: shipped_at
-        description: ""
+        description: "Order was shipped"
+        tests:
+          - not_null:
+              where: "delivered_at IS NOT NULL OR status = 'Shipped'"
 
       - name: delivered_at
-        description: ""
+        description: "time order was delivered"
+        tests:
+          - not_null:
+              where: "returned_at IS NOT NULL OR status = 'Complete'"
 
-      - name: num_of_item
-        description: ""
+      - name: num_items_ordered
+        description: "number of items in order"
+        tests:
+          - not_null
+          - not_negative
+

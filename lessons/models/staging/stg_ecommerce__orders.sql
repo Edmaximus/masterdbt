@@ -6,14 +6,20 @@ WITH source AS (
 )
 
 SELECT
+        -- IDs
         order_id,
         user_id,
+
+        -- Other columns
         status,
+        num_of_item as num_items_ordered,
+
+        -- Timestamps
         created_at,
         returned_at,
         shipped_at,
-        delivered_at,
-        num_of_item
+        delivered_at
+
 
 FROM source
 

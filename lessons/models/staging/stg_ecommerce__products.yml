@@ -1,0 +1,41 @@
+ersion: 2
+
+models:
+  - name: stg_ecommerce__products
+    description: "Table of 1 row per product"
+    columns:
+      - name: product_id
+        description: "Unique identifier for product"
+        tests:
+          - not_null:
+              severity: error
+          - unique:
+              severity: error
+
+      - name: cost
+        description: "cost of product"
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+
+      - name: retail_price
+        description: "price of product"
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+
+      - name: department
+        description: "department product belongs to"
+        tests:
+          - not_null
+          - accepted_values:
+              name: unexpected_department
+              values:
+                - "Men"
+                - "Women"
+              quote: true
+
+
+
